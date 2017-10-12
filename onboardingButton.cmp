@@ -1,0 +1,10 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <div style="background-color: white; border-radius: 5px;" class="slds-align_absolute-center">
+        <div style="margin: 20px">
+            <lightning:button variant="brand" label="OnBoard Customer" iconName="utility:adduser" iconPosition="left" onclick="{! c.launchOnboardingWizard }" />
+        </div>
+    </div>
+    
+</aura:component>
