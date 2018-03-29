@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>OnBoarding</members>
+        <name>AuraDefinitionBundle</name>
+    </types>
+    <types>
+        <members>arrows_pointing_up</members>
+        <name>ContentAsset</name>
+    </types>
+    <types>
+        <members>RampUp</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>Contractor__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>Contractor__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>Contractor__c</members>
+        <members>OnBoard</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>OnBoard</members>
+        <members>RampUp_UtilityBar</members>
+        <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>Contractor__c-Contractor Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>Contractor__c</members>
+        <name>ListView</name>
+    </types>
+    <version>42.0</version>
+</Package>

@@ -1,0 +1,135 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:attribute name="createRecord" type="Object" />
+    <aura:attribute name="error" type="Object" />
+    <aura:attribute name="fileNotLoaded" type="Boolean" default="true" />
+    <aura:attribute name="step" type="Integer" default="1" />
+    <aura:attribute name="detailStep" type="Boolean" default="true" />
+    <aura:attribute name="createFields" type="String[]" default="['Name', 'ContractingFirm__c', 'Phone__c', 'Email__c', 'Type__c', 'Term__c']" />
+    <aura:attribute name="histories" type="Object"/>
+    <aura:attribute name="columnDefs" type="List"/>
+    <aura:attribute name="recordId" type="Id" />
+    
+    <aura:attribute name="productStep" type="Boolean" default="false" />    
+    <aura:attribute name="contractStep" type="Boolean" default="false" />    
+    <aura:attribute name="recordCreated" type="Boolean" default="false" />
+    <aura:attribute name="confirmStep" type="Boolean" default="false" />
+    <aura:attribute name="incomplete" type="Boolean" default="true" />
+    <aura:attribute name="complete" type="Boolean" default="false" />
+    
+    <!-- DUALLISTBOX ATTRIBUTES -->
+    <aura:attribute name="listOptions" type="List" default="[]"/>
+    <aura:attribute name="defaultOptions" type="List" default="[]"/>
+    <aura:attribute name="requiredOptions" type="List" default="[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:card aura:id="card" footer="Card Footer" title="Hello">
+        <aura:set attribute="title">
+            <lightning:icon iconName="utility:connected_apps" size="small"/>
+            <ui:outputText value="Contractor Onboarding" class="slds-text-heading_large" />
+            <ui:outputText value="{!v.error}" />
+        </aura:set>        
+        <lightning:layout multipleRows="true">
+            <aura:renderIf isTrue="{!v.detailStep}">
+                <lightning:layoutItem padding="around-small" size="12">
+                    <lightning:formattedText value="Enter Contractor Details" class="slds-text-heading_medium" />
+                </lightning:layoutItem>                
+                <lightning:layoutItem padding="around-small" size="3" />
+                <lightning:layoutItem padding="around-small" size="6" >
+                    <lightning:card>
+                        <lightning:recordEditForm objectApiName="Contractor__c"
+                                                  onload="{!c.loaded}"
+                                                  onsuccess="{!c.handleSuccess}">
+                            
+                            <!-- the messages component is for error messages -->
+                            <lightning:messages />
+                
+                            <lightning:inputField fieldName="Name" />
+                            <div class="slds-m-top_medium">
+                                <lightning:button variant="brand" type="submit" name="save" label="Save" />
+                            </div>
+                        </lightning:recordEditForm>
+                    </lightning:card>                    
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="3" />
+            </aura:renderIf>
+        </lightning:layout>
+        <lightning:layout multipleRows="true">
+            <aura:renderIf isTrue="{!v.productStep}">
+                <lightning:layoutItem padding="around-small" size="12">
+                    <lightning:formattedText value="Select Core Competencies" class="slds-text-heading_medium" />
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="3" />
+                <lightning:layoutItem padding="around-small" size="6" class="slds-text-align_center">
+                    <lightning:dualListbox aura:id="productOptions" 
+                                           name="Products"  
+                                           label=""
+                                           sourceLabel="Available Products"
+                                           selectedLabel="Selected Products"
+                                           options="{! v.listOptions }"
+                                           value="{! v.defaultOptions }"
+                                           requiredOptions="{! v.requiredOptions }"
+                                           onchange="{! c.handleProductSelection }"
+                                           />
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="3" />
+            </aura:renderIf>
+        </lightning:layout>
+        <lightning:layout multipleRows="true">
+            <aura:renderIf isTrue="{!v.contractStep}">
+                <lightning:layoutItem padding="around-small" size="12">
+                    <lightning:formattedText value="Upload Signed Contract" class="slds-text-heading_medium" />
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="4" />
+                <lightning:layoutItem padding="around-small" size="4">
+                    <aura:if isTrue="{!v.fileNotLoaded}">
+                        <lightning:fileUpload label="Attach Contract"
+                                              recordId="{!v.recordId}"
+                                              accept="['.pdf']"
+                                              onuploadfinished="{! c.handleFilesChange }"/>
+                        <aura:set attribute="else">
+                            <lightning:fileCard aura:id="fcard" fileId="{!v.fileCardId}"/>    
+                        </aura:set>	
+                    </aura:if>                        
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="4" />
+            </aura:renderIf>
+        </lightning:layout>
+        <lightning:layout multipleRows="true">
+            <aura:renderIf isTrue="{!v.confirmStep}">
+                <lightning:layoutItem padding="around-small" size="12">
+                    <lightning:formattedText value="Confirm Customer Details" class="slds-text-heading_medium" />
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="2" />
+                <lightning:layoutItem padding="around-small" size="8">
+                    <aura:if isTrue="{!and(v.columnDefs, v.histories)}">
+                        <lightning:datatable keyField="id"
+                                             data="{! v.histories }" 
+                                             columns="{! v.columnDefs }" 
+                                             hideCheckboxColumn="true"/>        
+                    </aura:if>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="2" />
+            </aura:renderIf>
+        </lightning:layout>
+        <lightning:layout horizontalAlign="center">
+            <aura:renderIf isTrue="{!v.complete}">
+                    <lightning:icon iconName="action:approval" size="large" />
+            </aura:renderIf>
+        </lightning:layout>
+        <aura:set attribute="footer">
+            <lightning:progressIndicator aura:id="pind" currentStep="form" type="base" hasError="false" variant="base">
+                    <lightning:progressStep label="Contract Entry" value="form"/>
+                    <lightning:progressStep label="Product Selections" value="products"/>
+                	<lightning:progressStep label="Attach Contract" value="contract"/>
+                    <lightning:progressStep label="Confirmation" value="summary"/>
+            </lightning:progressIndicator>
+            <aura:renderIf isTrue="{! v.recordCreated }">           
+                <div style="margin-top: 20px;">
+                    <aura:renderIf isTrue="{! v.incomplete }">
+                        <lightning:button aura:id="progressBtn" variant="brand" label="Next" title="" onclick="{! c.handleBtnClick }" />
+                    </aura:renderIf>
+                </div>
+            </aura:renderIf>
+        </aura:set>
+    </lightning:card>
+</aura:component>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Term__c</fullName>
+    <externalId>false</externalId>
+    <label>Term</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Type__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>6 months</fullName>
+                <default>false</default>
+                <label>6 months</label>
+            </value>
+            <value>
+                <fullName>12 months</fullName>
+                <default>false</default>
+                <label>12 months</label>
+            </value>
+            <value>
+                <fullName>18 months</fullName>
+                <default>false</default>
+                <label>18 months</label>
+            </value>
+            <value>
+                <fullName>24 months</fullName>
+                <default>false</default>
+                <label>24 months</label>
+            </value>
+            <value>
+                <fullName>36 months</fullName>
+                <default>false</default>
+                <label>36 months</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Short-Term</controllingFieldValue>
+            <valueName>6 months</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Short-Term</controllingFieldValue>
+            <valueName>12 months</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Long-Term</controllingFieldValue>
+            <valueName>18 months</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Long-Term</controllingFieldValue>
+            <valueName>24 months</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Long-Term</controllingFieldValue>
+            <valueName>36 months</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>
